@@ -8,11 +8,14 @@ interface ProjectProps {
   description: string;
   tags: string[];
   link: string;
+  index: number;
 }
 
-const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link }) => {
+const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, index }) => {
+  const delayClass = `animate-delay-${(index + 1) * 100}`; 
+
   return (
-    <div className="project-card rounded-lg border border-border p-6 bg-card">
+    <div className={`project-card rounded-lg border border-border p-6 bg-card opacity-0 animate-fade-up ${delayClass}`}>
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-xl font-serif mb-2">{title}</h3>
@@ -66,10 +69,10 @@ const Projects: React.FC = () => {
   return (
     <section id="work" className="py-16">
       <div className="container-custom">
-        <h2 className="text-3xl font-serif mb-8">Selected Work</h2>
+        <h2 className="text-3xl font-serif mb-8 opacity-0 animate-fade-up">Selected Work</h2>
         <div className="grid gap-6">
           {projects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
+            <ProjectCard key={index} {...project} index={index} />
           ))}
         </div>
       </div>
