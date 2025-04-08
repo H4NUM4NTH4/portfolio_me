@@ -44,11 +44,11 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
   return (
     <div 
       ref={cardRef}
-      className={`project-card animated-border tilt-card glow border border-border/60 dark:border-primary/10 p-6 dark:hover:bg-primary/5 hover:bg-secondary/30 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'} ${isHovered ? 'shadow-lg' : ''}`}
+      className={`project-card animated-border glow border border-border/60 dark:border-primary/10 p-6 dark:hover:bg-primary/5 hover:bg-secondary/30 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'} ${isHovered ? 'shadow-lg' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex justify-between items-start tilt-card-content">
+      <div className="flex justify-between items-start">
         <div>
           <h3 className="text-xl font-medium mb-2 relative inline-block">
             {title}
@@ -109,33 +109,7 @@ const Projects: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Add parallax effect to project cards
-    if (!isVisible) return;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      const cards = document.querySelectorAll('.project-card');
-      cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const offsetX = (x - centerX) / 25;
-        const offsetY = (y - centerY) / 25;
-        
-        const htmlCard = card as HTMLElement;
-        htmlCard.style.transform = `perspective(1000px) rotateX(${-offsetY * 0.2}deg) rotateY(${offsetX * 0.2}deg) translateZ(10px)`;
-      });
-    };
-    
-    document.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [isVisible]);
+  // Removing the mouse parallax effect
 
   const projects = [
     {

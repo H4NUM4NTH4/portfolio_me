@@ -37,34 +37,7 @@ const Footer: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Add parallax effect to footer elements when scrolled into view
-    if (!isVisible) return;
-    
-    const handleScroll = () => {
-      if (!footerRef.current) return;
-      
-      const rect = footerRef.current.getBoundingClientRect();
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      
-      // Only apply when footer is in view
-      if (rect.bottom > 0 && rect.top < windowHeight) {
-        const footerTop = rect.top;
-        const visibleRatio = (windowHeight - footerTop) / (windowHeight + rect.height);
-        const parallaxValue = visibleRatio * 30;
-        
-        // Apply slight parallax to different sections
-        document.querySelectorAll('.footer-parallax').forEach((el, index) => {
-          const direction = index % 2 === 0 ? 1 : -1;
-          (el as HTMLElement).style.transform = `translateY(${parallaxValue * direction * 0.5}px)`;
-        });
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible]);
+  // Removed parallax effect
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,7 +72,7 @@ const Footer: React.FC = () => {
       
       <div className="container-custom relative z-10">
         <div className="grid md:grid-cols-2 gap-16">
-          <div className="footer-parallax">
+          <div>
             <div className={`w-16 h-0.5 bg-primary mb-6 ${isVisible ? 'animate-scale-in' : 'opacity-0'}`}></div>
             <h2 className={`text-3xl md:text-4xl font-medium mb-6 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
               <span className="gradient-text">Get in touch</span>
@@ -139,7 +112,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          <div className={`footer-parallax ${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
+          <div className={`${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
             <form onSubmit={handleSubmit} className="space-y-6 relative">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-2">

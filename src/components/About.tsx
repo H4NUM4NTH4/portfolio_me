@@ -31,39 +31,7 @@ const About: React.FC = () => {
     };
   }, []);
 
-  // Parallax effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current || !isVisible) return;
-      
-      const rect = sectionRef.current.getBoundingClientRect();
-      const offsetFromTop = -rect.top;
-      const parallaxValue = offsetFromTop * 0.1;
-      
-      // Apply parallax to various elements
-      document.querySelectorAll('.parallax-element').forEach((el, index) => {
-        const direction = index % 2 === 0 ? 1 : -1;
-        (el as HTMLElement).style.transform = `translateY(${parallaxValue * direction * 0.3}px)`;
-      });
-      
-      // Update active section based on scroll position
-      const sections = ['skills', 'connect'];
-      const viewportMiddle = window.innerHeight / 2;
-      
-      sections.forEach(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= viewportMiddle && rect.bottom >= viewportMiddle) {
-            setActiveSection(section);
-          }
-        }
-      });
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible]);
+  // Removed parallax effect
 
   const skills = [
     "UI/UX Design",
@@ -88,7 +56,7 @@ const About: React.FC = () => {
       
       <div className="container-custom relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-start">
-          <div className="parallax-element">
+          <div>
             <div className={`w-20 h-1 bg-primary mb-6 ${isVisible ? 'animate-scale-in' : 'opacity-0'}`}></div>
             <h2 className={`text-3xl md:text-4xl font-medium mb-6 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
               <span className="gradient-text">About Me</span>
@@ -120,7 +88,7 @@ const About: React.FC = () => {
             </div>
           </div>
           
-          <div className="parallax-element" style={{transform: 'translateY(20px)'}}>
+          <div>
             <div id="skills">
               <h3 className={`text-xl font-medium mb-6 ${isVisible ? 'animate-fade-up animate-delay-400' : 'opacity-0'}`}>Skills</h3>
               <ul className={`space-y-3 mb-8 ${isVisible ? 'animate-fade-up animate-delay-500' : 'opacity-0'}`}>

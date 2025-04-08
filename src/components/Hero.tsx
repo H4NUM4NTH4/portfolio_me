@@ -18,24 +18,10 @@ const Hero: React.FC = () => {
       }, 3500);
     }, 200);
     
-    // Add scroll magic
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const scrollY = window.scrollY;
-      const heroHeight = heroRef.current.offsetHeight;
-      const opacity = 1 - (scrollY / heroHeight) * 1.5;
-      const translateY = scrollY * 0.4;
-      
-      if (heroRef.current) {
-        heroRef.current.style.opacity = Math.max(0, opacity).toString();
-        heroRef.current.style.transform = `translateY(${translateY}px)`;
-      }
-    };
+    // Removing scroll parallax effect
     
-    window.addEventListener('scroll', handleScroll);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
   
@@ -89,8 +75,8 @@ const Hero: React.FC = () => {
                   isVisible ? `animate-scale-in animate-delay-${(index + 6) * 100}` : ''
                 }`}
               >
-                <div className="h-full w-full rounded-lg bg-gradient-to-br from-secondary/50 to-accent/30 p-4 flex items-center justify-center text-muted-foreground tilt-card">
-                  <span className="tilt-card-content">Project {index + 1}</span>
+                <div className="h-full w-full rounded-lg bg-gradient-to-br from-secondary/50 to-accent/30 p-4 flex items-center justify-center text-muted-foreground">
+                  <span>Project {index + 1}</span>
                 </div>
               </div>
             ))}
