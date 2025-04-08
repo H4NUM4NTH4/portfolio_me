@@ -38,10 +38,11 @@ const About: React.FC = () => {
   ];
 
   return (
-    <section id="components" className="py-16 bg-secondary/30" ref={sectionRef}>
+    <section id="components" className="py-24 bg-secondary/30" ref={sectionRef}>
       <div className="container-custom">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
+            <div className={`w-20 h-1 bg-primary mb-6 ${isVisible ? 'animate-scale-in' : 'opacity-0'}`}></div>
             <h2 className={`text-3xl md:text-4xl font-medium mb-6 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
               Beautiful UI components, crafted with care
             </h2>
@@ -51,27 +52,27 @@ const About: React.FC = () => {
             
             <ul className={`space-y-3 mb-8 ${isVisible ? 'animate-fade-up animate-delay-200' : 'opacity-0'}`}>
               {features.map((feature, index) => (
-                <li key={index} className="flex items-center">
+                <li key={index} className={`flex items-center opacity-0 ${isVisible ? `animate-fade-up animate-delay-${(index + 3) * 100}` : ''}`}>
                   <span className="inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full bg-primary/10 text-primary">•</span>
                   {feature}
                 </li>
               ))}
             </ul>
             
-            <Button className={`rounded-full px-6 py-2 h-12 ${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
+            <Button className={`rounded-full px-6 py-2 h-12 hover-lift ${isVisible ? 'animate-fade-up animate-delay-800' : 'opacity-0'}`}>
               Explore Components
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
           
-          <div className={`grid grid-cols-2 gap-4 ${isVisible ? 'animate-fade-in animate-delay-400' : 'opacity-0'}`}>
+          <div className={`grid grid-cols-2 gap-4 ${isVisible ? 'animate-fade-in animate-delay-300' : 'opacity-0'}`}>
             <div className="space-y-4">
-              <div className="h-32 rounded-lg bg-primary/5 border border-primary/10"></div>
-              <div className="h-48 rounded-lg bg-primary/5 border border-primary/10"></div>
+              <div className="h-32 rounded-lg bg-primary/5 border border-primary/10 transition-all hover-lift"></div>
+              <div className="h-48 rounded-lg bg-primary/5 border border-primary/10 transition-all hover-lift"></div>
             </div>
             <div className="space-y-4 mt-8">
-              <div className="h-48 rounded-lg bg-primary/5 border border-primary/10"></div>
-              <div className="h-32 rounded-lg bg-primary/5 border border-primary/10"></div>
+              <div className="h-48 rounded-lg bg-primary/5 border border-primary/10 transition-all hover-lift"></div>
+              <div className="h-32 rounded-lg bg-primary/5 border border-primary/10 transition-all hover-lift"></div>
             </div>
           </div>
         </div>

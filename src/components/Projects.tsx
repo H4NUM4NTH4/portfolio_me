@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 interface ProjectProps {
   title: string;
@@ -42,7 +43,7 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
   return (
     <div 
       ref={cardRef}
-      className={`project-card rounded-lg border border-border p-6 hover:border-primary/20 transition-all duration-300 ${isVisible ? `animate-slide-up ${delayClass}` : 'opacity-0'}`}
+      className={`project-card rounded-lg border border-border p-6 hover:border-primary/20 transition-all duration-500 hover:bg-secondary/10 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'}`}
     >
       <div className="flex justify-between items-start">
         <div>
@@ -120,19 +121,50 @@ const Projects: React.FC = () => {
   ];
 
   return (
-    <section id="templates" className="py-16" ref={sectionRef}>
+    <section id="templates" className="py-24" ref={sectionRef}>
       <div className="container-custom">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className={`text-3xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>Templates</h2>
-          <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
+        <div className="flex justify-between items-center mb-12">
+          <h2 className={`text-3xl md:text-4xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>Templates</h2>
+          <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
             View all
             <ArrowUpRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
-        <div className="grid gap-6">
-          {projects.map((project, index) => (
-            <ProjectCard key={index} {...project} index={index} />
-          ))}
+        
+        <div className="hidden md:block">
+          <div className="grid gap-6">
+            {projects.map((project, index) => (
+              <ProjectCard key={index} {...project} index={index} />
+            ))}
+          </div>
+        </div>
+        
+        {/* Mobile carousel view */}
+        <div className="md:hidden">
+          <Carousel className={isVisible ? 'animate-fade-in animate-delay-300' : 'opacity-0'}>
+            <CarouselContent>
+              {projects.map((project, index) => (
+                <CarouselItem key={index} className="basis-full">
+                  <div className="project-card rounded-lg border border-border p-6">
+                    <h3 className="text-xl font-medium mb-2">{project.title}</h3>
+                    <p className="text-muted-foreground mb-4">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag, i) => (
+                        <span key={i} className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <a href={project.link} className="text-primary hover:text-primary/80 transition-colors">
+                      View Project <ArrowUpRight size={16} className="inline" />
+                    </a>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </div>
     </section>

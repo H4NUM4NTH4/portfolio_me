@@ -28,10 +28,11 @@ const Footer: React.FC = () => {
   }, []);
 
   return (
-    <footer className="py-16 border-t border-border" ref={footerRef}>
+    <footer className="py-24 border-t border-border" ref={footerRef}>
       <div className="container-custom">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
+            <div className={`w-16 h-0.5 bg-primary mb-6 ${isVisible ? 'animate-scale-in' : 'opacity-0'}`}></div>
             <h3 className={`text-lg font-medium mb-4 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>NextStarter</h3>
             <p className={`text-sm text-muted-foreground mb-4 ${isVisible ? 'animate-fade-up animate-delay-100' : 'opacity-0'}`}>
               Beautiful UI components and templates to build modern web applications.
