@@ -30,43 +30,50 @@ const Footer: React.FC = () => {
   return (
     <footer className="py-16 border-t border-border" ref={footerRef}>
       <div className="container-custom">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           <div>
-            <h2 className={`text-3xl font-serif mb-4 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>Contact</h2>
+            <h3 className={`text-lg font-medium mb-4 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>NextStarter</h3>
+            <p className={`text-sm text-muted-foreground mb-4 ${isVisible ? 'animate-fade-up animate-delay-100' : 'opacity-0'}`}>
+              Beautiful UI components and templates to build modern web applications.
+            </p>
           </div>
-          <div className="md:col-span-2">
-            <p className={`text-lg mb-6 ${isVisible ? 'animate-fade-up animate-delay-100' : 'opacity-0'}`}>
-              Let's work together on your next project. I'm currently available for new opportunities.
-            </p>
-            
-            <div className={`space-y-2 mb-8 ${isVisible ? 'animate-fade-up animate-delay-200' : 'opacity-0'}`}>
-              <p className="font-medium">Email</p>
-              <a href="mailto:hello@example.com" className="underline-grow text-muted-foreground">
-                hello@example.com
-              </a>
-            </div>
-            
-            <div className={`space-y-2 mb-8 ${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
-              <p className="font-medium">Connect</p>
-              <div className="flex space-x-6">
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="underline-grow text-muted-foreground">
-                  Twitter
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="underline-grow text-muted-foreground">
-                  LinkedIn
-                </a>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="underline-grow text-muted-foreground">
-                  GitHub
-                </a>
-                <a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" className="underline-grow text-muted-foreground">
-                  Dribbble
-                </a>
-              </div>
-            </div>
-            
-            <p className={`text-sm text-muted-foreground ${isVisible ? 'animate-fade-up animate-delay-400' : 'opacity-0'}`}>
-              © {new Date().getFullYear()} All rights reserved
-            </p>
+          
+          <div className={`${isVisible ? 'animate-fade-up animate-delay-200' : 'opacity-0'}`}>
+            <h4 className="text-sm font-medium mb-3">Resources</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Documentation</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Components</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Templates</a></li>
+            </ul>
+          </div>
+          
+          <div className={`${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
+            <h4 className="text-sm font-medium mb-3">Company</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">About</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Blog</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Careers</a></li>
+            </ul>
+          </div>
+          
+          <div className={`${isVisible ? 'animate-fade-up animate-delay-400' : 'opacity-0'}`}>
+            <h4 className="text-sm font-medium mb-3">Legal</h4>
+            <ul className="space-y-2">
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Privacy</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">Terms</a></li>
+              <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground underline-grow">License</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className={`mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center ${isVisible ? 'animate-fade-up animate-delay-500' : 'opacity-0'}`}>
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} NextStarter. All rights reserved.
+          </p>
+          <div className="flex space-x-6 mt-4 md:mt-0">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">Twitter</a>
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">GitHub</a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">Discord</a>
           </div>
         </div>
       </div>

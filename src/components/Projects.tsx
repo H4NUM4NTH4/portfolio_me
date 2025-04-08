@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 interface ProjectProps {
   title: string;
@@ -42,17 +42,17 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
   return (
     <div 
       ref={cardRef}
-      className={`project-card rounded-lg border border-border p-6 bg-card ${isVisible ? `animate-slide-up ${delayClass}` : 'opacity-0'}`}
+      className={`project-card rounded-lg border border-border p-6 hover:border-primary/20 transition-all duration-300 ${isVisible ? `animate-slide-up ${delayClass}` : 'opacity-0'}`}
     >
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="text-xl font-serif mb-2">{title}</h3>
+          <h3 className="text-xl font-medium mb-2">{title}</h3>
           <p className="text-muted-foreground mb-4">{description}</p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag, index) => (
               <span 
                 key={index} 
-                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded"
+                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full"
               >
                 {tag}
               </span>
@@ -100,29 +100,35 @@ const Projects: React.FC = () => {
 
   const projects = [
     {
-      title: "Personal Website",
-      description: "A minimalist portfolio website built with React and Tailwind CSS.",
-      tags: ["Web Design", "React", "Tailwind"],
+      title: "Landing Page",
+      description: "A modern, responsive landing page template for your product or service.",
+      tags: ["React", "Tailwind CSS", "TypeScript"],
       link: "#",
     },
     {
-      title: "Digital Garden",
-      description: "A collection of thoughts, notes, and essays on design and development.",
-      tags: ["Web Design", "Content", "Development"],
+      title: "Dashboard",
+      description: "A customizable admin dashboard with charts, tables, and user management.",
+      tags: ["React", "shadcn/ui", "Recharts"],
       link: "#",
     },
     {
-      title: "Design System",
-      description: "A comprehensive design system for creating consistent user interfaces.",
-      tags: ["UI Design", "System Design", "Components"],
+      title: "E-commerce",
+      description: "A complete online store template with product listings, cart, and checkout.",
+      tags: ["React", "React Query", "TanStack"],
       link: "#",
     },
   ];
 
   return (
-    <section id="work" className="py-16" ref={sectionRef}>
+    <section id="templates" className="py-16" ref={sectionRef}>
       <div className="container-custom">
-        <h2 className={`text-3xl font-serif mb-8 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>Selected Work</h2>
+        <div className="flex justify-between items-center mb-8">
+          <h2 className={`text-3xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>Templates</h2>
+          <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}>
+            View all
+            <ArrowUpRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
         <div className="grid gap-6">
           {projects.map((project, index) => (
             <ProjectCard key={index} {...project} index={index} />
