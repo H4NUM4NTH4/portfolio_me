@@ -14,6 +14,7 @@ interface ProjectProps {
 
 const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, index }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -38,22 +39,28 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
     };
   }, []);
 
-  const delayClass = `animate-delay-${(index + 1) * 100}`; 
+  const delayClass = `animate-delay-${(index + 1) * 100}`;
 
   return (
     <div 
       ref={cardRef}
-      className={`project-card glow border border-border/60 dark:border-primary/10 p-6 dark:hover:bg-primary/5 hover:bg-secondary/30 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'}`}
+      className={`project-card animated-border tilt-card glow border border-border/60 dark:border-primary/10 p-6 dark:hover:bg-primary/5 hover:bg-secondary/30 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'} ${isHovered ? 'shadow-lg' : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start tilt-card-content">
         <div>
-          <h3 className="text-xl font-medium mb-2">{title}</h3>
+          <h3 className="text-xl font-medium mb-2 relative inline-block">
+            {title}
+            <span className={`absolute -bottom-1 left-0 h-[2px] bg-primary/50 dark:bg-white/50 transition-all duration-300 ${isHovered ? 'w-full' : 'w-0'}`}></span>
+          </h3>
           <p className="text-muted-foreground mb-4">{description}</p>
           <div className="flex flex-wrap gap-2">
             {tags.map((tag, index) => (
               <span 
                 key={index} 
-                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground dark:bg-secondary/20 dark:text-primary rounded-full"
+                className={`text-xs px-2 py-1 bg-secondary text-secondary-foreground dark:bg-secondary/20 dark:text-primary rounded-full transition-all duration-300 ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-80'}`}
+                style={{ transitionDelay: `${index * 50}ms` }}
               >
                 {tag}
               </span>
@@ -64,11 +71,14 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
           href={link} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-primary hover:text-primary/80 transition-colors hover-lift"
+          className={`text-primary hover:text-primary/80 transition-colors hover-lift ${isHovered ? 'rotate-12 scale-125' : 'rotate-0'}`}
         >
           <ArrowUpRight size={20} />
         </a>
       </div>
+      
+      {/* Shimmer overlay */}
+      <div className={`absolute inset-0 animate-shimmer pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}></div>
     </div>
   );
 };
@@ -99,6 +109,34 @@ const Projects: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Add parallax effect to project cards
+    if (!isVisible) return;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      const cards = document.querySelectorAll('.project-card');
+      cards.forEach((card, index) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const offsetX = (x - centerX) / 25;
+        const offsetY = (y - centerY) / 25;
+        
+        const htmlCard = card as HTMLElement;
+        htmlCard.style.transform = `perspective(1000px) rotateX(${-offsetY * 0.2}deg) rotateY(${offsetX * 0.2}deg) translateZ(10px)`;
+      });
+    };
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isVisible]);
+
   const projects = [
     {
       title: "Portfolio Website",
@@ -121,8 +159,14 @@ const Projects: React.FC = () => {
   ];
 
   return (
-    <section id="work" className="py-24" ref={sectionRef}>
-      <div className="container-custom">
+    <section id="work" className="py-24 relative" ref={sectionRef}>
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-10 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
+      </div>
+      
+      <div className="container-custom relative z-10">
         <div className="flex justify-between items-center mb-12">
           <h2 className={`text-3xl md:text-4xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
             <span className="gradient-text">Selected Work</span>
@@ -147,12 +191,12 @@ const Projects: React.FC = () => {
             <CarouselContent>
               {projects.map((project, index) => (
                 <CarouselItem key={index} className="basis-full">
-                  <div className="project-card rounded-lg border border-border p-6 glow">
+                  <div className="project-card rounded-lg border border-border p-6 glow animated-border">
                     <h3 className="text-xl font-medium mb-2">{project.title}</h3>
                     <p className="text-muted-foreground mb-4">{project.description}</p>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.tags.map((tag, i) => (
-                        <span key={i} className="text-xs px-2 py-1 bg-secondary dark:bg-secondary/20 dark:text-primary text-secondary-foreground rounded-full">
+                        <span key={i} className="text-xs px-2 py-1 bg-secondary dark:bg-secondary/20 dark:text-primary text-secondary-foreground rounded-full animate-pulse-slow">
                           {tag}
                         </span>
                       ))}
@@ -164,8 +208,8 @@ const Projects: React.FC = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="animate-pulse-slow" />
+            <CarouselNext className="animate-pulse-slow" />
           </Carousel>
         </div>
       </div>

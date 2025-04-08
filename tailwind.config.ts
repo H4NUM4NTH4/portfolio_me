@@ -92,6 +92,23 @@ export default {
           "70%": { transform: "translate(0%, 15%)" },
           "80%": { transform: "translate(3%, 35%)" },
           "90%": { transform: "translate(-10%, 10%)" },
+        },
+        "float": {
+          "0%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-15px)" },
+          "100%": { transform: "translateY(0px)" },
+        },
+        "pulse-gentle": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
+        },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "bounce-gentle": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
         }
       },
       animation: {
@@ -100,6 +117,10 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "gradient-shift": "gradient-shift 10s ease infinite",
         "grain": "grain 1.5s steps(10) infinite",
+        "float": "float 6s ease-in-out infinite",
+        "pulse-gentle": "pulse-gentle 3s ease-in-out infinite",
+        "spin-slow": "spin-slow 15s linear infinite",
+        "bounce-gentle": "bounce-gentle 3s ease-in-out infinite"
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
