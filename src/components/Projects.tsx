@@ -43,7 +43,7 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
   return (
     <div 
       ref={cardRef}
-      className={`project-card rounded-lg border border-border p-6 hover:border-primary/20 transition-all duration-500 hover:bg-secondary/10 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'}`}
+      className={`project-card glow border border-border/60 dark:border-primary/10 p-6 dark:hover:bg-primary/5 hover:bg-secondary/30 ${isVisible ? `animate-fade-up ${delayClass}` : 'opacity-0'}`}
     >
       <div className="flex justify-between items-start">
         <div>
@@ -53,7 +53,7 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
             {tags.map((tag, index) => (
               <span 
                 key={index} 
-                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full"
+                className="text-xs px-2 py-1 bg-secondary text-secondary-foreground dark:bg-secondary/20 dark:text-primary rounded-full"
               >
                 {tag}
               </span>
@@ -101,30 +101,32 @@ const Projects: React.FC = () => {
 
   const projects = [
     {
-      title: "Landing Page",
-      description: "A modern, responsive landing page template for your product or service.",
-      tags: ["React", "Tailwind CSS", "TypeScript"],
+      title: "Portfolio Website",
+      description: "A clean, modern portfolio website with dark mode support and animations.",
+      tags: ["React", "TailwindCSS", "TypeScript"],
       link: "#",
     },
     {
-      title: "Dashboard",
-      description: "A customizable admin dashboard with charts, tables, and user management.",
+      title: "E-commerce Dashboard",
+      description: "Admin dashboard for managing products, orders, and customer data.",
       tags: ["React", "shadcn/ui", "Recharts"],
       link: "#",
     },
     {
-      title: "E-commerce",
-      description: "A complete online store template with product listings, cart, and checkout.",
-      tags: ["React", "React Query", "TanStack"],
+      title: "Mobile Banking App",
+      description: "User-friendly mobile banking application with robust security features.",
+      tags: ["React Native", "TypeScript", "API"],
       link: "#",
     },
   ];
 
   return (
-    <section id="templates" className="py-24" ref={sectionRef}>
+    <section id="work" className="py-24" ref={sectionRef}>
       <div className="container-custom">
         <div className="flex justify-between items-center mb-12">
-          <h2 className={`text-3xl md:text-4xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>Templates</h2>
+          <h2 className={`text-3xl md:text-4xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
+            <span className="gradient-text">Selected Work</span>
+          </h2>
           <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
             View all
             <ArrowUpRight className="ml-2 h-4 w-4" />
@@ -145,12 +147,12 @@ const Projects: React.FC = () => {
             <CarouselContent>
               {projects.map((project, index) => (
                 <CarouselItem key={index} className="basis-full">
-                  <div className="project-card rounded-lg border border-border p-6">
+                  <div className="project-card rounded-lg border border-border p-6 glow">
                     <h3 className="text-xl font-medium mb-2">{project.title}</h3>
                     <p className="text-muted-foreground mb-4">{project.description}</p>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.tags.map((tag, i) => (
-                        <span key={i} className="text-xs px-2 py-1 bg-secondary text-secondary-foreground rounded-full">
+                        <span key={i} className="text-xs px-2 py-1 bg-secondary dark:bg-secondary/20 dark:text-primary text-secondary-foreground rounded-full">
                           {tag}
                         </span>
                       ))}
