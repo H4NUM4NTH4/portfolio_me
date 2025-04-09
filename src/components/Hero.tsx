@@ -18,10 +18,24 @@ const Hero: React.FC = () => {
       }, 3500);
     }, 200);
     
-    // Removing scroll parallax effect
+    // Add back the parallax effect
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const scrollY = window.scrollY;
+        const heroElements = heroRef.current.querySelectorAll('.parallax');
+        
+        heroElements.forEach((element) => {
+          const speed = parseFloat((element as HTMLElement).dataset.speed || '0.1');
+          (element as HTMLElement).style.transform = `translateY(${scrollY * speed}px)`;
+        });
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
     
     return () => {
       clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
   
@@ -31,16 +45,18 @@ const Hero: React.FC = () => {
       ref={heroRef}
     >
       <div 
-        className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none animate-float"
+        className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none animate-float parallax"
         style={{animationDelay: '1s'}}
+        data-speed="0.05"
       ></div>
       <div 
-        className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none animate-float"
+        className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none animate-float parallax"
         style={{animationDelay: '2s'}}
+        data-speed="0.08"
       ></div>
       
       <div className="container-custom relative z-10">
-        <div className={`max-w-4xl space-y-6`}>
+        <div className={`max-w-4xl space-y-6 parallax`} data-speed="-0.03">
           <h1 className={`text-5xl md:text-6xl lg:text-7xl font-serif font-normal leading-tight mb-6 opacity-0 ${isVisible ? 'animate-text-focus' : ''}`}>
             <span className={`gradient-text ${isVisible ? 'animate-typing' : ''} ${typingComplete ? 'w-full' : ''}`}>
               Rasmic
@@ -71,9 +87,10 @@ const Hero: React.FC = () => {
             {[1, 2, 3, 4].map((item, index) => (
               <div 
                 key={index}
-                className={`aspect-video rounded-xl bg-secondary/30 border border-primary/10 transition-all hover-lift opacity-0 glow animated-border ${
+                className={`aspect-video rounded-xl bg-secondary/30 border border-primary/10 transition-all hover-lift opacity-0 glow animated-border parallax ${
                   isVisible ? `animate-scale-in animate-delay-${(index + 6) * 100}` : ''
                 }`}
+                data-speed={0.02 + (index * 0.01)}
               >
                 <div className="h-full w-full rounded-lg bg-gradient-to-br from-secondary/50 to-accent/30 p-4 flex items-center justify-center text-muted-foreground">
                   <span>Project {index + 1}</span>
@@ -85,7 +102,7 @@ const Hero: React.FC = () => {
       </div>
       
       {/* Floating elements */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce" style={{animationDuration: '3s'}}>
+      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce parallax" style={{animationDuration: '3s'}} data-speed="0.1">
         <ArrowDown className="h-6 w-6 text-muted-foreground/50" />
       </div>
     </section>
