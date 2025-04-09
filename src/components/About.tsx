@@ -33,14 +33,6 @@ const About: React.FC = () => {
 
   // Removed parallax effect
 
-  const skills = [
-    "UI/UX Design",
-    "React & React Native",
-    "TypeScript",
-    "Node.js",
-    "TailwindCSS",
-  ];
-
   return (
     <section id="about" className="py-24 bg-secondary/30 dark:bg-secondary/5 relative overflow-hidden" ref={sectionRef}>
       {/* Background elements */}
@@ -89,32 +81,6 @@ const About: React.FC = () => {
           </div>
           
           <div>
-            <div id="skills">
-              <h3 className={`text-xl font-medium mb-6 ${isVisible ? 'animate-fade-up animate-delay-400' : 'opacity-0'}`}>Skills</h3>
-              <ul className={`space-y-3 mb-8 ${isVisible ? 'animate-fade-up animate-delay-500' : 'opacity-0'}`}>
-                {skills.map((skill, index) => (
-                  <li 
-                    key={index} 
-                    ref={el => skillRefs.current[index] = el}
-                    className={`flex items-center opacity-0 ${isVisible ? `animate-fade-up animate-delay-${(index + 6) * 100}` : ''}`}
-                    onMouseEnter={() => {
-                      if (skillRefs.current[index]) {
-                        skillRefs.current[index]!.classList.add('scale-105');
-                      }
-                    }}
-                    onMouseLeave={() => {
-                      if (skillRefs.current[index]) {
-                        skillRefs.current[index]!.classList.remove('scale-105');
-                      }
-                    }}
-                  >
-                    <span className="inline-flex items-center justify-center w-5 h-5 mr-2 rounded-full bg-primary/10 text-primary animate-pulse-slow" style={{animationDelay: `${index * 0.2}s`}}>•</span>
-                    <span className="transition-transform duration-300">{skill}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
             <div id="connect">
               <h3 className={`text-xl font-medium mb-4 ${isVisible ? 'animate-fade-up animate-delay-800' : 'opacity-0'}`}>Let's Connect</h3>
               <p className="text-muted-foreground mb-6">

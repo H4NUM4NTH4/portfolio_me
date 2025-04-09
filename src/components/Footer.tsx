@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,14 +36,11 @@ const Footer: React.FC = () => {
     };
   }, []);
 
-  // Removed parallax effect
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setFormStatus('submitting');
     
-    // Simulate form submission
     setTimeout(() => {
       toast({
         title: "Message sent!",
@@ -55,7 +51,6 @@ const Footer: React.FC = () => {
       setIsSubmitting(false);
       setFormStatus('success');
       
-      // Reset status after a delay
       setTimeout(() => {
         setFormStatus('idle');
       }, 3000);
@@ -64,7 +59,6 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="py-24 border-t border-border dark:border-border/20 relative overflow-hidden" ref={footerRef} id="contact">
-      {/* Animated background elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl animate-float" style={{animationDelay: '1s'}}></div>
         <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
@@ -85,14 +79,14 @@ const Footer: React.FC = () => {
               <div className="group">
                 <p className="text-sm mb-2 text-muted-foreground">Email</p>
                 <p className="text-lg mb-6 relative inline-block group-hover:text-primary transition-colors duration-300">
-                  hello@rasmic.xyz
+                  thisishanumantha.in@gmail.com
                   <span className="absolute left-0 bottom-0 h-[1px] w-full bg-primary/50 origin-left transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
                 </p>
               </div>
               
               <div className="group">
                 <p className="text-sm mb-2 text-muted-foreground">Location</p>
-                <p className="text-lg mb-2 group-hover:text-primary transition-colors duration-300">San Francisco, CA</p>
+                <p className="text-lg mb-2 group-hover:text-primary transition-colors duration-300">Hubli, India</p>
               </div>
               
               <div className="flex space-x-4 mt-8">
@@ -160,7 +154,6 @@ const Footer: React.FC = () => {
                 )}
               </Button>
               
-              {/* Animated success indicator */}
               <div className={`absolute -inset-4 rounded-lg border-2 border-primary/50 dark:border-white/50 transition-all duration-500 ${formStatus === 'success' ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}></div>
             </form>
           </div>
@@ -168,7 +161,7 @@ const Footer: React.FC = () => {
         
         <div className={`mt-16 pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center ${isVisible ? 'animate-fade-up animate-delay-500' : 'opacity-0'}`}>
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Rasmic. All rights reserved.
+            © {new Date().getFullYear()} Hanumantha. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-foreground">Twitter</a>

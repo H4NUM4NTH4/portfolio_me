@@ -68,7 +68,7 @@ const Header: React.FC = () => {
             >
               <span className="relative overflow-hidden inline-block">
                 <span className="relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary dark:after:bg-white after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100">
-                  rasmic
+                  hanumantha
                 </span>
               </span>
             </Link>
