@@ -86,7 +86,7 @@ const Header: React.FC = () => {
                 </Link>
               ))}
               <a 
-                href="https://github.com" 
+                href="https://github.com/H4NUM4NTH4" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="underline-grow text-sm relative overflow-hidden group"
@@ -134,7 +134,7 @@ const Header: React.FC = () => {
             </Link>
           ))}
           <a 
-            href="https://github.com"
+            href="https://github.com/H4NUM4NTH4"
             target="_blank"
             rel="noopener noreferrer"
             className={`text-2xl font-medium transition-all duration-300 transform ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}

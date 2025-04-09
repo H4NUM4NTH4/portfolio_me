@@ -62,17 +62,17 @@ const About: React.FC = () => {
             </p>
             
             <div className={`flex space-x-4 mb-8 ${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="group">
+              <a href="https://github.com/H4NUM4NTH4" target="_blank" rel="noopener noreferrer" className="group">
                 <Button variant="outline" size="icon" className="rounded-full glow group-hover:scale-110 transition-all duration-300">
                   <Github size={18} className="group-hover:text-primary transition-colors duration-300" />
                 </Button>
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="group">
+              <a href="https://x.com/Hanumantha_05" target="_blank" rel="noopener noreferrer" className="group">
                 <Button variant="outline" size="icon" className="rounded-full glow group-hover:scale-110 transition-all duration-300">
                   <Twitter size={18} className="group-hover:text-primary transition-colors duration-300" />
                 </Button>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="group">
+              <a href="https://www.linkedin.com/in/hanumantha-sm" target="_blank" rel="noopener noreferrer" className="group">
                 <Button variant="outline" size="icon" className="rounded-full glow group-hover:scale-110 transition-all duration-300">
                   <Linkedin size={18} className="group-hover:text-primary transition-colors duration-300" />
                 </Button>
