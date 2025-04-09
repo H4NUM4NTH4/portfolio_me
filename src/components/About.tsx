@@ -62,11 +62,11 @@ const About: React.FC = () => {
               <span className="gradient-text">About Me</span>
             </h2>
             <p className={`text-lg text-muted-foreground mb-8 ${isVisible ? 'animate-fade-up animate-delay-100' : 'opacity-0'}`}>
-              I'm a designer and developer with over 5 years of experience creating digital products. I specialize in building clean, user-friendly interfaces and bringing them to life with code.
+              I'm a passionate full stack developer and software engineering enthusiast who loves turning ideas into interactive digital experiences. With a strong focus on clean code, performance, and user-centric design, I enjoy building solutions that are not just functional but also intuitive and engaging.
             </p>
             
             <p className={`text-lg text-muted-foreground mb-8 ${isVisible ? 'animate-fade-up animate-delay-200' : 'opacity-0'}`}>
-              I'm passionate about creating accessible and performant web experiences that look beautiful on any device. When I'm not coding, you'll find me exploring new design trends or experimenting with new technologies.
+              I'm always curious, always learning, and driven by the thrill of creating something meaningful through technology.
             </p>
             
             <div className={`flex space-x-4 mb-8 ${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>

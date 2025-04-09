@@ -59,14 +59,14 @@ const Hero: React.FC = () => {
         <div className={`max-w-4xl space-y-6 parallax`} data-speed="-0.03">
           <h1 className={`text-5xl md:text-6xl lg:text-7xl font-serif font-normal leading-tight mb-6 opacity-0 ${isVisible ? 'animate-text-focus' : ''}`}>
             <span className={`gradient-text ${isVisible ? 'animate-typing' : ''} ${typingComplete ? 'w-full' : ''}`}>
-              Rasmic
+              Hanumantha
             </span> — Designer & Developer
           </h1>
           
           <div className={`w-20 h-1 bg-primary opacity-0 ${isVisible ? 'animate-fade-up animate-delay-300' : ''}`}></div>
           
           <p className={`text-lg md:text-xl text-muted-foreground max-w-2xl opacity-0 ${isVisible ? 'animate-fade-up animate-delay-400' : ''}`}>
-            I'm a designer and developer who combines creativity with technical skills to build beautiful, functional websites and applications.
+            I'm a developer and problem-solver who blends creativity with strong technical skills to build clean, efficient, and user-focused web applications.
           </p>
           
           <div className={`pt-4 space-x-4 opacity-0 ${isVisible ? 'animate-fade-up animate-delay-500' : ''}`}>
