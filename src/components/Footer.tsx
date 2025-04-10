@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,9 +63,6 @@ const Footer: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // Initialize EmailJS with your user ID
-      emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
-      
       const templateParams = {
         from_email: values.email,
         to_email: "thisishanumantha.in@gmail.com",
@@ -74,9 +70,10 @@ const Footer: React.FC = () => {
       };
       
       const response = await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-        templateParams
+        'service_n6r8ubc',
+        'template_nn7nsio',
+        templateParams,
+        'pFpQqgOj4kLjs6APZ'
       );
       
       console.log('SUCCESS!', response.status, response.text);
