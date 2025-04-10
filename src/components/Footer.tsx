@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Loader2 } from 'lucide-react';
+import emailjs from 'emailjs-com';
 
 const Footer: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -42,20 +43,46 @@ const Footer: React.FC = () => {
     setIsSubmitting(true);
     setFormStatus('submitting');
     
-    setTimeout(() => {
-      toast({
-        title: "Message sent!",
-        description: "I'll get back to you as soon as possible.",
+    // Initialize EmailJS with your user ID
+    // Note: In production, you should use environment variables for these keys
+    emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
+    
+    const templateParams = {
+      from_email: email,
+      to_email: "thisishanumantha.in@gmail.com",
+      message: message
+    };
+    
+    emailjs.send(
+      'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+      'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+      templateParams
+    )
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        toast({
+          title: "Message sent!",
+          description: "I'll get back to you as soon as possible.",
+        });
+        setEmail("");
+        setMessage("");
+        setIsSubmitting(false);
+        setFormStatus('success');
+        
+        setTimeout(() => {
+          setFormStatus('idle');
+        }, 3000);
+      })
+      .catch((err) => {
+        console.error('FAILED...', err);
+        toast({
+          title: "Something went wrong",
+          description: "Please try again or contact me directly at thisishanumantha.in@gmail.com",
+          variant: "destructive"
+        });
+        setIsSubmitting(false);
+        setFormStatus('error');
       });
-      setEmail("");
-      setMessage("");
-      setIsSubmitting(false);
-      setFormStatus('success');
-      
-      setTimeout(() => {
-        setFormStatus('idle');
-      }, 3000);
-    }, 1000);
   };
 
   return (
@@ -121,6 +148,7 @@ const Footer: React.FC = () => {
                   placeholder="your@email.com"
                   required
                   className="rounded-lg border-border/40 bg-background focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                  disabled={isSubmitting}
                 />
               </div>
               
@@ -135,6 +163,7 @@ const Footer: React.FC = () => {
                   placeholder="Tell me about your project..."
                   required
                   className="min-h-[150px] rounded-lg border-border/40 bg-background focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                  disabled={isSubmitting}
                 />
               </div>
               
@@ -143,8 +172,13 @@ const Footer: React.FC = () => {
                 disabled={isSubmitting}
                 className="w-full rounded-lg hover-lift glow group relative overflow-hidden"
               >
-                <span className="relative z-10 group-hover:text-white transition-colors duration-300">
-                  {formStatus === 'submitting' ? "Sending..." : formStatus === 'success' ? "Sent!" : "Send Message"}
+                <span className="relative z-10 group-hover:text-white transition-colors duration-300 flex items-center gap-2">
+                  {formStatus === 'submitting' ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Sending...
+                    </>
+                  ) : formStatus === 'success' ? "Message sent!" : "Send Message"}
                 </span>
                 <span className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60 dark:from-white/80 dark:to-white/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 
