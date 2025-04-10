@@ -3,6 +3,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Link } from 'react-router-dom';
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  link: string;
+}
 
 interface ProjectProps {
   title: string;
@@ -86,7 +95,27 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
 const Projects: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
   
+  useEffect(() => {
+    // Load projects from localStorage
+    const savedProjects = localStorage.getItem('portfolio-projects');
+    
+    if (savedProjects) {
+      try {
+        const parsedProjects = JSON.parse(savedProjects);
+        setProjects(parsedProjects);
+      } catch (error) {
+        console.error('Failed to parse saved projects:', error);
+        // If there's an error parsing, use default projects
+        setProjects(defaultProjects);
+      }
+    } else {
+      // If no saved projects, use default projects
+      setProjects(defaultProjects);
+    }
+  }, []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -109,28 +138,32 @@ const Projects: React.FC = () => {
     };
   }, []);
 
-  // Removing the mouse parallax effect
-
-  const projects = [
+  // Default projects to show if no saved projects exist
+  const defaultProjects = [
     {
+      id: "1",
       title: "Portfolio Website",
       description: "A clean, modern portfolio website with dark mode support and animations.",
       tags: ["React", "TailwindCSS", "TypeScript"],
       link: "#",
     },
     {
+      id: "2",
       title: "E-commerce Dashboard",
       description: "Admin dashboard for managing products, orders, and customer data.",
       tags: ["React", "shadcn/ui", "Recharts"],
       link: "#",
     },
     {
+      id: "3",
       title: "Mobile Banking App",
       description: "User-friendly mobile banking application with robust security features.",
       tags: ["React Native", "TypeScript", "API"],
       link: "#",
     },
   ];
+
+  const displayProjects = projects.length > 0 ? projects : defaultProjects;
 
   return (
     <section id="work" className="py-24 relative" ref={sectionRef}>
@@ -145,16 +178,25 @@ const Projects: React.FC = () => {
           <h2 className={`text-3xl md:text-4xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
             <span className="gradient-text">Selected Work</span>
           </h2>
-          <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
-            View all
-            <ArrowUpRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/manage-projects">
+            <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
+              Manage projects
+              <ArrowUpRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </div>
         
         <div className="hidden md:block">
           <div className="grid gap-6">
-            {projects.map((project, index) => (
-              <ProjectCard key={index} {...project} index={index} />
+            {displayProjects.map((project, index) => (
+              <ProjectCard 
+                key={project.id}
+                title={project.title}
+                description={project.description}
+                tags={project.tags}
+                link={project.link}
+                index={index}
+              />
             ))}
           </div>
         </div>
@@ -163,8 +205,8 @@ const Projects: React.FC = () => {
         <div className="md:hidden">
           <Carousel className={isVisible ? 'animate-fade-in animate-delay-300' : 'opacity-0'}>
             <CarouselContent>
-              {projects.map((project, index) => (
-                <CarouselItem key={index} className="basis-full">
+              {displayProjects.map((project) => (
+                <CarouselItem key={project.id} className="basis-full">
                   <div className="project-card rounded-lg border border-border p-6 glow animated-border">
                     <h3 className="text-xl font-medium mb-2">{project.title}</h3>
                     <p className="text-muted-foreground mb-4">{project.description}</p>
