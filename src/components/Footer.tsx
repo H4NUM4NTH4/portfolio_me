@@ -6,16 +6,38 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowUpRight, Loader2 } from 'lucide-react';
 import emailjs from 'emailjs-com';
+import { 
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage 
+} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+const formSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  message: z.string().min(5, { message: "Message must be at least 5 characters" })
+});
 
 const Footer: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const footerRef = useRef<HTMLDivElement>(null);
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const { toast } = useToast();
   
+  // Initialize form with react-hook-form and zod validation
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      message: ""
+    }
+  });
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -38,51 +60,42 @@ const Footer: React.FC = () => {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    setFormStatus('submitting');
     
-    // Initialize EmailJS with your user ID
-    // Note: In production, you should use environment variables for these keys
-    emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
-    
-    const templateParams = {
-      from_email: email,
-      to_email: "thisishanumantha.in@gmail.com",
-      message: message
-    };
-    
-    emailjs.send(
-      'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-      'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-      templateParams
-    )
-      .then((response) => {
-        console.log('SUCCESS!', response.status, response.text);
-        toast({
-          title: "Message sent!",
-          description: "I'll get back to you as soon as possible.",
-        });
-        setEmail("");
-        setMessage("");
-        setIsSubmitting(false);
-        setFormStatus('success');
-        
-        setTimeout(() => {
-          setFormStatus('idle');
-        }, 3000);
-      })
-      .catch((err) => {
-        console.error('FAILED...', err);
-        toast({
-          title: "Something went wrong",
-          description: "Please try again or contact me directly at thisishanumantha.in@gmail.com",
-          variant: "destructive"
-        });
-        setIsSubmitting(false);
-        setFormStatus('error');
+    try {
+      // Initialize EmailJS with your user ID
+      emailjs.init("YOUR_USER_ID"); // Replace with your actual EmailJS User ID
+      
+      const templateParams = {
+        from_email: values.email,
+        to_email: "thisishanumantha.in@gmail.com",
+        message: values.message
+      };
+      
+      const response = await emailjs.send(
+        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        templateParams
+      );
+      
+      console.log('SUCCESS!', response.status, response.text);
+      toast({
+        title: "Message sent!",
+        description: "I'll get back to you as soon as possible.",
       });
+      
+      form.reset();
+    } catch (err) {
+      console.error('FAILED...', err);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or contact me directly at thisishanumantha.in@gmail.com",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -135,62 +148,63 @@ const Footer: React.FC = () => {
           </div>
           
           <div className={`${isVisible ? 'animate-fade-up animate-delay-300' : 'opacity-0'}`}>
-            <form onSubmit={handleSubmit} className="space-y-6 relative">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email
-                </label>
-                <Input 
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  required
-                  className="rounded-lg border-border/40 bg-background focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                  disabled={isSubmitting}
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 relative">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="your@email.com"
+                          className="rounded-lg border-border/40 bg-background focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                          disabled={isSubmitting}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
-                  Message
-                </label>
-                <Textarea
-                  id="message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tell me about your project..."
-                  required
-                  className="min-h-[150px] rounded-lg border-border/40 bg-background focus:ring-2 focus:ring-primary/20 transition-all duration-300"
-                  disabled={isSubmitting}
-                />
-              </div>
-              
-              <Button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="w-full rounded-lg hover-lift glow group relative overflow-hidden"
-              >
-                <span className="relative z-10 group-hover:text-white transition-colors duration-300 flex items-center gap-2">
-                  {formStatus === 'submitting' ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" />
-                      Sending...
-                    </>
-                  ) : formStatus === 'success' ? "Message sent!" : "Send Message"}
-                </span>
-                <span className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60 dark:from-white/80 dark:to-white/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 
-                {formStatus === 'success' && (
-                  <span className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <ArrowUpRight size={16} className="animate-fade-in" />
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Message</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Tell me about your project..."
+                          className="min-h-[150px] rounded-lg border-border/40 bg-background focus:ring-2 focus:ring-primary/20 transition-all duration-300"
+                          disabled={isSubmitting}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full rounded-lg hover-lift glow group relative overflow-hidden"
+                >
+                  <span className="relative z-10 group-hover:text-white transition-colors duration-300 flex items-center gap-2">
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 size={16} className="animate-spin" />
+                        Sending...
+                      </>
+                    ) : "Send Message"}
                   </span>
-                )}
-              </Button>
-              
-              <div className={`absolute -inset-4 rounded-lg border-2 border-primary/50 dark:border-white/50 transition-all duration-500 ${formStatus === 'success' ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}></div>
-            </form>
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60 dark:from-white/80 dark:to-white/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                </Button>
+              </form>
+            </Form>
           </div>
         </div>
         
