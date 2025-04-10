@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,10 +71,10 @@ const Footer: React.FC = () => {
       };
       
       const response = await emailjs.send(
-        'service_n6r8ubc',
+        'service_hanumantha42',
         'template_nn7nsio',
         templateParams,
-        'pFpQqgOj4kLjs6APZ'
+        'ZAExKwdo4FFE7UQc3'
       );
       
       console.log('SUCCESS!', response.status, response.text);
