@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from '@/hooks/use-toast';
 import ProjectForm, { ProjectFormValues } from '@/components/ProjectForm';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface Project {
   id: string;
@@ -36,8 +38,16 @@ const ManageProjects = () => {
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   
   useEffect(() => {
+    // Check authentication
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
     // Load projects from localStorage on component mount
     const savedProjects = localStorage.getItem('portfolio-projects');
     if (savedProjects) {
@@ -47,7 +57,7 @@ const ManageProjects = () => {
         console.error('Failed to parse saved projects:', error);
       }
     }
-  }, []);
+  }, [navigate, isAuthenticated]);
   
   // Save projects to localStorage whenever they change
   useEffect(() => {
@@ -84,7 +94,7 @@ const ManageProjects = () => {
     if (currentProject) {
       // Edit existing project
       setProjects(projects.map(p => 
-        p.id === currentProject.id ? { ...data, id: currentProject.id } : p
+        p.id === currentProject.id ? { ...data, id: currentProject.id } as Project : p
       ));
       toast({
         title: "Project updated",
@@ -92,7 +102,7 @@ const ManageProjects = () => {
       });
     } else {
       // Add new project
-      const newProject = {
+      const newProject: Project = {
         ...data,
         id: Date.now().toString(),
       };

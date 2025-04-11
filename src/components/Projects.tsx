@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Project {
   id: string;
@@ -86,7 +86,6 @@ const ProjectCard: React.FC<ProjectProps> = ({ title, description, tags, link, i
         </a>
       </div>
       
-      {/* Shimmer overlay */}
       <div className={`absolute inset-0 animate-shimmer pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'}`}></div>
     </div>
   );
@@ -96,9 +95,9 @@ const Projects: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const { isAuthenticated } = useAuth();
   
   useEffect(() => {
-    // Load projects from localStorage
     const savedProjects = localStorage.getItem('portfolio-projects');
     
     if (savedProjects) {
@@ -107,11 +106,9 @@ const Projects: React.FC = () => {
         setProjects(parsedProjects);
       } catch (error) {
         console.error('Failed to parse saved projects:', error);
-        // If there's an error parsing, use default projects
         setProjects(defaultProjects);
       }
     } else {
-      // If no saved projects, use default projects
       setProjects(defaultProjects);
     }
   }, []);
@@ -138,7 +135,6 @@ const Projects: React.FC = () => {
     };
   }, []);
 
-  // Default projects to show if no saved projects exist
   const defaultProjects = [
     {
       id: "1",
@@ -167,7 +163,6 @@ const Projects: React.FC = () => {
 
   return (
     <section id="work" className="py-24 relative" ref={sectionRef}>
-      {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-float"></div>
         <div className="absolute bottom-20 right-10 w-80 h-80 bg-primary/5 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
@@ -178,12 +173,21 @@ const Projects: React.FC = () => {
           <h2 className={`text-3xl md:text-4xl font-medium mb-2 ${isVisible ? 'animate-text-focus' : 'opacity-0'}`}>
             <span className="gradient-text">Selected Work</span>
           </h2>
-          <Link to="/manage-projects">
-            <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
-              Manage projects
-              <ArrowUpRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link to="/manage-projects">
+              <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
+                Manage projects
+                <ArrowUpRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          ) : (
+            <Link to="/login">
+              <Button variant="ghost" className={`rounded-full ${isVisible ? 'animate-fade-in animate-delay-200' : 'opacity-0'}`}>
+                Admin
+                <ArrowUpRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          )}
         </div>
         
         <div className="hidden md:block">
@@ -201,7 +205,6 @@ const Projects: React.FC = () => {
           </div>
         </div>
         
-        {/* Mobile carousel view */}
         <div className="md:hidden">
           <Carousel className={isVisible ? 'animate-fade-in animate-delay-300' : 'opacity-0'}>
             <CarouselContent>
