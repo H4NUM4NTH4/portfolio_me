@@ -101,10 +101,13 @@ const ManageProjects = () => {
         description: "Your changes have been saved successfully.",
       });
     } else {
-      // Add new project
+      // Add new project - ensure all required fields are present
       const newProject: Project = {
-        ...data,
         id: Date.now().toString(),
+        title: data.title,
+        description: data.description,
+        tags: data.tags,
+        link: data.link
       };
       setProjects([...projects, newProject]);
       toast({
