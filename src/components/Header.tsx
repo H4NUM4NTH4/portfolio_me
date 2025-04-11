@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -38,7 +39,7 @@ const Header = () => {
       <div className="container-custom flex h-16 items-center justify-between">
         <div className="flex items-center gap-10">
           <Link to="/" className="text-xl font-bold">
-            <span className="gradient-text">Portfolio</span>
+            <span className="gradient-text">hanumantha</span>
           </Link>
           
           <nav className="hidden md:flex gap-6">
@@ -46,7 +47,7 @@ const Header = () => {
               <a
                 key={link.href}
                 href={link.href}
-                onClick={(e) => link.href.startsWith('/#') && navigateToAnchor(e, link.href)}
+                onClick={(e) => navigateToAnchor(e, link.href)}
                 className={cn(
                   "text-sm transition-colors hover:text-primary",
                   location.hash === link.href.replace('/', '') && "text-primary font-medium"

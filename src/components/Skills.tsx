@@ -91,7 +91,7 @@ const Skills: React.FC = () => {
     {
       icon: <Globe size={24} />,
       title: "Frontend Development",
-      skills: ["HTML", "CSS", "TailwindCSS", "Bootstrap", "ReactJs"]
+      skills: ["HTML", "CSS", "TailwindCSS", "Bootstrap", "ReactJs", "shadcn/ui"]
     },
     {
       icon: <Server size={24} />,

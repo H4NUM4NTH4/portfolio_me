@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -11,7 +10,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // The admin password - in a real app, this would use proper authentication
-const ADMIN_PASSWORD = "portfolio-admin-2025";
+const ADMIN_PASSWORD = "Sanju@42";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
