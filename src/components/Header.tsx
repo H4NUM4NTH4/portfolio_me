@@ -50,7 +50,10 @@ const Header = () => {
                 onClick={(e) => navigateToAnchor(e, link.href)}
                 className={cn(
                   "text-sm transition-colors hover:text-primary",
-                  location.hash === link.href.replace('/', '') && "text-primary font-medium"
+                  (location.pathname === '/' && location.hash === link.href.replace('/', '')) || 
+                  (link.href === '/' && location.pathname === '/' && !location.hash) 
+                    ? "text-primary font-medium" 
+                    : ""
                 )}
               >
                 {link.label}
