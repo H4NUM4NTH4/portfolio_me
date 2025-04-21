@@ -23,6 +23,7 @@ import { useToast } from '@/hooks/use-toast';
 import ProjectForm, { ProjectFormValues } from '@/components/ProjectForm';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { fetchProjects, updateProjects } from '@/services/projectService';
 
 export interface Project {
   id: string;
@@ -37,6 +38,7 @@ const ManageProjects = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
@@ -48,21 +50,36 @@ const ManageProjects = () => {
       return;
     }
     
-    // Load projects from localStorage on component mount
-    const savedProjects = localStorage.getItem('portfolio-projects');
-    if (savedProjects) {
+    // Load projects from API
+    const loadProjects = async () => {
+      setIsLoading(true);
       try {
-        setProjects(JSON.parse(savedProjects));
+        const loadedProjects = await fetchProjects();
+        setProjects(loadedProjects);
       } catch (error) {
-        console.error('Failed to parse saved projects:', error);
+        console.error('Failed to fetch projects:', error);
+        toast({
+          title: "Error loading projects",
+          description: "Could not load your projects. Please try again later.",
+          variant: "destructive"
+        });
+        
+        // Try to load from localStorage as fallback
+        const savedProjects = localStorage.getItem('portfolio-projects');
+        if (savedProjects) {
+          try {
+            setProjects(JSON.parse(savedProjects));
+          } catch (error) {
+            console.error('Failed to parse saved projects:', error);
+          }
+        }
+      } finally {
+        setIsLoading(false);
       }
-    }
-  }, [navigate, isAuthenticated]);
-  
-  // Save projects to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('portfolio-projects', JSON.stringify(projects));
-  }, [projects]);
+    };
+    
+    loadProjects();
+  }, [navigate, isAuthenticated, toast]);
 
   const handleAddProject = () => {
     setCurrentProject(null);
@@ -78,28 +95,34 @@ const ManageProjects = () => {
     setProjectToDelete(projectId);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!projectToDelete) return;
     
-    setProjects(projects.filter(project => project.id !== projectToDelete));
+    const updatedProjects = projects.filter(project => project.id !== projectToDelete);
+    setProjects(updatedProjects);
+    
+    // Update API
+    const success = await updateProjects(updatedProjects);
+    
     toast({
-      title: "Project deleted",
-      description: "The project has been successfully removed.",
+      title: success ? "Project deleted" : "Error deleting project",
+      description: success 
+        ? "The project has been successfully removed." 
+        : "There was an error deleting the project. It may only be removed locally.",
+      variant: success ? "default" : "destructive",
     });
     
     setProjectToDelete(null);
   };
 
-  const handleFormSubmit = (data: ProjectFormValues) => {
+  const handleFormSubmit = async (data: ProjectFormValues) => {
+    let updatedProjects: Project[];
+    
     if (currentProject) {
       // Edit existing project
-      setProjects(projects.map(p => 
+      updatedProjects = projects.map(p => 
         p.id === currentProject.id ? { ...data, id: currentProject.id } as Project : p
-      ));
-      toast({
-        title: "Project updated",
-        description: "Your changes have been saved successfully.",
-      });
+      );
     } else {
       // Add new project - ensure all required fields are present
       const newProject: Project = {
@@ -109,12 +132,23 @@ const ManageProjects = () => {
         tags: data.tags,
         link: data.link
       };
-      setProjects([...projects, newProject]);
-      toast({
-        title: "Project added",
-        description: "New project has been added to your portfolio.",
-      });
+      updatedProjects = [...projects, newProject];
     }
+    
+    setProjects(updatedProjects);
+    
+    // Update API
+    const success = await updateProjects(updatedProjects);
+    
+    toast({
+      title: currentProject ? "Project updated" : "Project added",
+      description: success 
+        ? currentProject 
+          ? "Your changes have been saved successfully."
+          : "New project has been added to your portfolio."
+        : "Changes saved locally but there was an error updating the shared project list.",
+      variant: success ? "default" : "destructive",
+    });
     
     setIsFormOpen(false);
   };
@@ -128,7 +162,11 @@ const ManageProjects = () => {
         </Button>
       </div>
       
-      {projects.length === 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      ) : projects.length === 0 ? (
         <div className="text-center py-12 border border-dashed rounded-lg">
           <p className="text-muted-foreground mb-4">You haven't added any projects yet.</p>
           <Button onClick={handleAddProject} variant="secondary">Add Your First Project</Button>
