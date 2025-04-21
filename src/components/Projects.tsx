@@ -1,13 +1,17 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { fetchProjects } from '@/services/projectService';
-import { Project } from '@/pages/ManageProjects';
-import { useToast } from "@/hooks/use-toast";
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  link: string;
+}
 
 interface ProjectProps {
   title: string;
@@ -91,56 +95,23 @@ const Projects: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [projects, setProjects] = useState<Project[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { isAuthenticated } = useAuth();
-  const { toast } = useToast();
   
   useEffect(() => {
-    const loadProjects = async () => {
-      setIsLoading(true);
-      try {
-        const loadedProjects = await fetchProjects();
-        setProjects(loadedProjects);
-      } catch (error) {
-        console.error('Failed to load projects:', error);
-        toast({
-          title: "Error loading projects",
-          description: "Could not load projects. Using default examples instead.",
-          variant: "destructive"
-        });
-        
-        // Use default projects as fallback
-        const defaultProjects = [
-          {
-            id: "1",
-            title: "Portfolio Website",
-            description: "A clean, modern portfolio website with dark mode support and animations.",
-            tags: ["React", "TailwindCSS", "TypeScript"],
-            link: "#",
-          },
-          {
-            id: "2",
-            title: "E-commerce Dashboard",
-            description: "Admin dashboard for managing products, orders, and customer data.",
-            tags: ["React", "shadcn/ui", "Recharts"],
-            link: "#",
-          },
-          {
-            id: "3",
-            title: "Mobile Banking App",
-            description: "User-friendly mobile banking application with robust security features.",
-            tags: ["React Native", "TypeScript", "API"],
-            link: "#",
-          },
-        ];
-        setProjects(defaultProjects);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const savedProjects = localStorage.getItem('portfolio-projects');
     
-    loadProjects();
-  }, [toast]);
+    if (savedProjects) {
+      try {
+        const parsedProjects = JSON.parse(savedProjects);
+        setProjects(parsedProjects);
+      } catch (error) {
+        console.error('Failed to parse saved projects:', error);
+        setProjects(defaultProjects);
+      }
+    } else {
+      setProjects(defaultProjects);
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -163,6 +134,32 @@ const Projects: React.FC = () => {
       }
     };
   }, []);
+
+  const defaultProjects = [
+    {
+      id: "1",
+      title: "Portfolio Website",
+      description: "A clean, modern portfolio website with dark mode support and animations.",
+      tags: ["React", "TailwindCSS", "TypeScript"],
+      link: "#",
+    },
+    {
+      id: "2",
+      title: "E-commerce Dashboard",
+      description: "Admin dashboard for managing products, orders, and customer data.",
+      tags: ["React", "shadcn/ui", "Recharts"],
+      link: "#",
+    },
+    {
+      id: "3",
+      title: "Mobile Banking App",
+      description: "User-friendly mobile banking application with robust security features.",
+      tags: ["React Native", "TypeScript", "API"],
+      link: "#",
+    },
+  ];
+
+  const displayProjects = projects.length > 0 ? projects : defaultProjects;
 
   return (
     <section id="work" className="py-24 relative" ref={sectionRef}>
@@ -193,55 +190,47 @@ const Projects: React.FC = () => {
           )}
         </div>
         
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <div className="hidden md:block">
+          <div className="grid gap-6">
+            {displayProjects.map((project, index) => (
+              <ProjectCard 
+                key={project.id}
+                title={project.title}
+                description={project.description}
+                tags={project.tags}
+                link={project.link}
+                index={index}
+              />
+            ))}
           </div>
-        ) : (
-          <>
-            <div className="hidden md:block">
-              <div className="grid gap-6">
-                {projects.map((project, index) => (
-                  <ProjectCard 
-                    key={project.id}
-                    title={project.title}
-                    description={project.description}
-                    tags={project.tags}
-                    link={project.link}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </div>
-            
-            <div className="md:hidden">
-              <Carousel className={isVisible ? 'animate-fade-in animate-delay-300' : 'opacity-0'}>
-                <CarouselContent>
-                  {projects.map((project) => (
-                    <CarouselItem key={project.id} className="basis-full">
-                      <div className="project-card rounded-lg border border-border p-6 glow animated-border">
-                        <h3 className="text-xl font-medium mb-2">{project.title}</h3>
-                        <p className="text-muted-foreground mb-4">{project.description}</p>
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {project.tags.map((tag, i) => (
-                            <span key={i} className="text-xs px-2 py-1 bg-secondary dark:bg-secondary/20 dark:text-primary text-secondary-foreground rounded-full animate-pulse-slow">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <a href={project.link} className="text-primary hover:text-primary/80 transition-colors">
-                          View Project <ArrowUpRight size={16} className="inline" />
-                        </a>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="animate-pulse-slow" />
-                <CarouselNext className="animate-pulse-slow" />
-              </Carousel>
-            </div>
-          </>
-        )}
+        </div>
+        
+        <div className="md:hidden">
+          <Carousel className={isVisible ? 'animate-fade-in animate-delay-300' : 'opacity-0'}>
+            <CarouselContent>
+              {displayProjects.map((project) => (
+                <CarouselItem key={project.id} className="basis-full">
+                  <div className="project-card rounded-lg border border-border p-6 glow animated-border">
+                    <h3 className="text-xl font-medium mb-2">{project.title}</h3>
+                    <p className="text-muted-foreground mb-4">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag, i) => (
+                        <span key={i} className="text-xs px-2 py-1 bg-secondary dark:bg-secondary/20 dark:text-primary text-secondary-foreground rounded-full animate-pulse-slow">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <a href={project.link} className="text-primary hover:text-primary/80 transition-colors">
+                      View Project <ArrowUpRight size={16} className="inline" />
+                    </a>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="animate-pulse-slow" />
+            <CarouselNext className="animate-pulse-slow" />
+          </Carousel>
+        </div>
       </div>
     </section>
   );
