@@ -145,10 +145,10 @@ const Projects: React.FC = () => {
     },
     {
       id: "2",
-      title: "E-commerce Dashboard",
-      description: "Admin dashboard for managing products, orders, and customer data.",
-      tags: ["React", "shadcn/ui", "Recharts"],
-      link: "#",
+      title: "Plant Disease Detection Using Deep Learning",
+      description: "A deep learning-based image classification project that detects plant diseases from leaf images using Convolutional Neural Networks (CNN). Trained on a diverse dataset, the model helps identify crop diseases early, supporting smart farming and precision agriculture.",
+      tags: ["React", "JavaScript", "Tailwind CSS", "shadcn/ui", "Python", "TensorFlow / Keras", "CNN Architecture"],
+      link: "https://plant-disease-prediction-app.vercel.app/",
     },
     {
       id: "3",
