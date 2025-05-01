@@ -138,10 +138,10 @@ const Projects: React.FC = () => {
   const defaultProjects = [
     {
       id: "1",
-      title: "Portfolio Website",
-      description: "A clean, modern portfolio website with dark mode support and animations.",
-      tags: ["React", "TailwindCSS", "TypeScript"],
-      link: "#",
+      title: "Real Estate Valuation App",
+      description: "This is a machine learning-powered web application that predicts house prices based on user inputs such as bedrooms, bathrooms, square footage, and zip code. It utilizes Ensemble Regression Models for high-accuracy predictions.",
+      tags: ["Python", "Pandas", "NumPy", "Scikit-learn","Jupyter Notebook"],
+      link: "https://real-estate-project-aiml.streamlit.app/",
     },
     {
       id: "2",
