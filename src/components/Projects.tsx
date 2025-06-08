@@ -142,8 +142,6 @@ const Projects: React.FC = () => {
       description: "A secure biometric authentication system that uses iris recognition for banking access and verification. The application captures iris images, preprocesses them, and applies segmentation and normalization techniques for accurate identification. Daugman’s algorithm is used for iris feature extraction. This system enhances banking security by preventing unauthorized access, replacing traditional PIN/password systems.",
       tags: ["React", "Nodejs", "Express", "TailwindCSS", "Shadcn/Ui", "OpenCV", "Python", "Machine Learning", "Render", "Vercel"],
       link: "https://iris-bank-frontend.vercel.app/",
-],
-      link: "#",
     },
     {
       id: "2",
